@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>ct-building-tariff-contract test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../ct-building-tariff-contract.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <ct-building-tariff-contract></ct-building-tariff-contract>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('ct-building-tariff-contract', function() {
+        test('instantiating the element works', function() {
+          var element = fixture('basic');
+          assert.equal(element.is, 'ct-building-tariff-contract');
+        });
+      });
+    </script>
+  </body>
+</html>
