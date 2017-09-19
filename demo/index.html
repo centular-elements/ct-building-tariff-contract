@@ -22,8 +22,85 @@
       <h3>Basic ct-building-tariff-contract demo</h3>
       <demo-snippet>
         <template>-->
-          <ct-component-demo-identity token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI3MzU1MTg4NjFlODY0ZjRlODlhNzc5NDY4ZmE0ZWIyYyIsImRpZCI6ImFlZDY5YjdlLTQ5ZjEtNDIyZi04MThiLTBmZjUzMDM3NTQ2YSIsImNpZCI6IjJhYzVhNTVjLWZhZjAtNDQ5OC1iNWI1LTU1ODMwMGNiYzFmZSIsInVpZCI6IjU4ZTQ2MzdmLWUyYzgtNDJmYS1iNGI1LTdlMTk2YWJmNWJhOSIsImp0aSI6ImVjMjEwMzhlLWI1MjMtNGMzNy1iMWRmLWJiY2JiOTY5MjZhMyIsImV4cCI6MTUwNTgwNzc5MH0.7QawGog-4GUAXuxZh3coIoMMx6hsLjhOD2qtQUO0o8o"></ct-component-demo-identity>
-          <ct-building-tariff-contract building-id="059622ba-8be0-11e7-84a6-a9887743c8e1"></ct-building-tariff-contract>
+          <ct-component-demo-identity token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI3MzU1MTg4NjFlODY0ZjRlODlhNzc5NDY4ZmE0ZWIyYyIsImRpZCI6ImFlZDY5YjdlLTQ5ZjEtNDIyZi04MThiLTBmZjUzMDM3NTQ2YSIsImNpZCI6IjJhYzVhNTVjLWZhZjAtNDQ5OC1iNWI1LTU1ODMwMGNiYzFmZSIsInVpZCI6IjU4ZTQ2MzdmLWUyYzgtNDJmYS1iNGI1LTdlMTk2YWJmNWJhOSIsImp0aSI6IjFlNWQxZmEyLTBlZTEtNDhkMS1hNWJmLTRiOGMxMGNhOTVhOCIsImV4cCI6MTUwNTg5NTI1MH0.6qi6OEYaJPABf-iodWyI2x959t688Csh2mjAEbUZrsk"></ct-component-demo-identity>
+          <ct-building-tariff-contract building-id="059622ba-8be0-11e7-84a6-a9887743c8e1" readonly contract='{
+    "municipalTariffSetId": "fd4a44e5-9883-11e7-8c4d-253a729a4d96",
+    "payer": {
+        "id": 0,
+        "name": "Owner"
+    },
+    "tariffs": [
+        {
+            "vat": 14,
+            "clientRebate": 1.03,
+            "baseTariff": 1,
+            "utilityType": {
+                "id": 0,
+                "name": "Electricity"
+            },
+            "fees": [
+                {
+                    "percentage": 8.75,
+                    "vat": 0.01,
+                    "name": "Citiq",
+                    "amount": 0.1,
+                    "inclVat": 0.11
+                }
+            ],
+            "baseTariffPlusVat": 1.14,
+            "toUnits": 350,
+            "fromUnits": 0,
+            "consumerTariff": 1.14,
+            "baseTariffVat": 0.14
+        },
+        {
+            "vat": 14,
+            "clientRebate": 2.05,
+            "baseTariff": 2,
+            "utilityType": {
+                "id": 0,
+                "name": "Electricity"
+            },
+            "fees": [
+                {
+                    "percentage": 8.75,
+                    "vat": 0.03,
+                    "name": "Citiq",
+                    "amount": 0.2,
+                    "inclVat": 0.23
+                }
+            ],
+            "baseTariffPlusVat": 2.28,
+            "toUnits": 700,
+            "fromUnits": 350.001,
+            "consumerTariff": 2.28,
+            "baseTariffVat": 0.28
+        },
+        {
+            "vat": 14,
+            "clientRebate": 3.08,
+            "baseTariff": 3,
+            "utilityType": {
+                "id": 0,
+                "name": "Electricity"
+            },
+            "fees": [
+                {
+                    "percentage": 8.75,
+                    "vat": 0.04,
+                    "name": "Citiq",
+                    "amount": 0.3,
+                    "inclVat": 0.34
+                }
+            ],
+            "baseTariffPlusVat": 3.42,
+            "fromUnits": 700.001,
+            "consumerTariff": 3.42,
+            "baseTariffVat": 0.42
+        }
+    ]
+}
+          '></ct-building-tariff-contract>
         <!--</template>
       </demo-snippet>
     </div>-->

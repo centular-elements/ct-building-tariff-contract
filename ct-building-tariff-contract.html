@@ -4,10 +4,14 @@
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
 <link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../ct-core-utils/ct-api-consumer-behaviour.html">
 <link rel="import" href="../ct-municipality-api/ct-municipality-api.html">
 <link rel="import" href="../ct-building-tariffs/ct-building-tariffs.html">
 <link rel="import" href="../ct-buildings-api/ct-buildings-api.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+
 
 <!--
 `ct-building-tariff-contract`
@@ -38,12 +42,32 @@ Element for managing a building&#39;s tariffs
       }
       .main-section {
         margin-top:20px;
+        margin-bottom:15px;
       }
       paper-dropdown-menu.custom-dropdown {
         width: 100%;
         --paper-input-container-input: {
           padding-left: 10px;
         };
+      }
+      paper-tab {
+        background: #33a5e0;
+        color: #fff;
+        font-weight: bold;
+      }
+      paper-tab:hover {
+        background: #5fbdee;
+      }
+      paper-tab.iron-selected {
+        background:#fff;
+        color: #0077aa;
+        border-top:1px solid #ccc;
+        border-right:1px solid #ccc;
+        border-left:1px solid #ccc;
+      }
+      paper-material {
+        background: #fff;
+        padding-top: 10px;
       }
     </style>
 
@@ -58,7 +82,7 @@ Element for managing a building&#39;s tariffs
                       id="searchMunicipalityInput"
                       label="Search Municipality"
                       type="text"
-                      visible="[[ !readonly ]]"
+                      hidden="[[ readonly ]]"
                       placeholder="Type and press enter to search"
               ></paper-input>
               <iron-a11y-keys id="a11y" keys="enter" target="[[ _target ]]" on-keys-pressed="_searchMunicipality"></iron-a11y-keys>
@@ -115,8 +139,8 @@ Element for managing a building&#39;s tariffs
                         auto-validate="[[ !readonly ]]"
                         error-message="Required">
                   <paper-listbox class="dropdown-content" id="payerListBox" attr-for-selected="key" selected="[[ contract.payer.id ]]">
-                    <paper-item key="0" item='{id:0}'>Owner</paper-item>
-                    <paper-item key="1" item='{id:1}'>Tenant</paper-item>
+                    <paper-item key="0">Owner</paper-item>
+                    <paper-item key="1">Tenant</paper-item>
                   </paper-listbox>
                 </paper-dropdown-menu>
               </template>
@@ -149,12 +173,28 @@ Element for managing a building&#39;s tariffs
               ></paper-input>
             </div>
             <div class="col-sm-12 col-xs-12">
-              <paper-button class="table-button btn-primary btn-sm center" on-tap="_calculateTariffs" raised>Calculate</paper-button>
+              <paper-button class="table-button btn-primary btn-sm" on-tap="_calculateTariffs" raised hidden="[[ readonly ]]">Calculate</paper-button>
             </div>
           </div>
         </div>
     </div>
-    <ct-building-tariffs tariffs="[[ _buildingTariffs ]]"></ct-building-tariffs>
+
+    <paper-tabs selected='{{ _utility }}' attr-for-selected='key'>
+      <paper-tab key="electricity">Electricity</paper-tab>
+      <paper-tab key="water">Water</paper-tab>
+    </paper-tabs>
+    <iron-pages selected='{{ _utility }}' attr-for-selected='key'>
+      <div key="electricity">
+        <paper-material>
+          <ct-building-tariffs tariffs="[[ _electTariffs ]]"></ct-building-tariffs>
+        </paper-material>
+      </div>
+      <div key="water">
+        <paper-material>
+          <ct-building-tariffs tariffs="[[ _waterTariffs ]]"></ct-building-tariffs>
+        </paper-material>
+      </div>
+    </iron-pages>
   </template>
 
   <script>
@@ -173,11 +213,17 @@ Element for managing a building&#39;s tariffs
           value: function () {
             return this.$.searchMunicipalityInput
           }
+        },
+        contract: Object,
+        _utility: {
+          type: String,
+          value: 'electricity'
         }
       },
 
       observers: [
-        '_populateMunicipalityDropDown(_searchResults)'
+        '_populateMunicipalityDropDown(_searchResults)',
+        '_splitByUtilityType(contract)'
       ],
 
       _searchMunicipality: function (e) {
@@ -209,25 +255,55 @@ Element for managing a building&#39;s tariffs
         var validMunicipality = municipalityDropDown.validate();
         var validPayer = payerDropDown.validate();
 
-        var selectedPayer = payerDropDown.selectedItem;
-
         if (validMunicipality && validPayer) {
           var contract = {
             municipalTariffSetId: municipalityDropDown.selectedItem.item.id,
-            payer: payerDropDown.selectedItem.item.id,
-            flatRate: flatRateInput.value.length > 0 ? flatRateInput.value : undefined,
-            reservedBlockPercentage: reservedBlockPercentageInput.value.length > 0 ? reservedBlockPercentageInput.value : undefined,
-            tenantCount: tenantCountInput.value.length > 0 ? tenantCountInput.value : undefined,
+            payer: parseInt(payerDropDown.selectedItem.getAttribute('key')),
+            flatRate: flatRateInput.value.length > 0 ? parseFloat(flatRateInput.value) : undefined,
+            reservedBlockPercentage: reservedBlockPercentageInput.value.length > 0 ? parseFloat(reservedBlockPercentageInput.value) : undefined,
+            tenantCount: tenantCountInput.value.length > 0 ? parseInt(tenantCountInput.value) : undefined,
             commonArea: undefined
           };
 
+          this._electTariffs = undefined;
+          this._waterTariffs = undefined;
           this.$.buildingsApi.previewTariffs(this.buildingId, contract)
-                  .then(this._setPropertyResponseResults.bind(this, '_buildingTariffs'))
-                  .catch(this.fire.bind(this, 'toast', {message: 'Failed to preview building tariffs', type: 'danger'}))
-                  .finally();
+            .then(this._setPropertyResponse.bind(this, 'contract'))
+            .catch(this.fire.bind(this, 'toast', {message: 'Failed to preview building tariffs', type: 'danger'}))
+            .finally();
+        }
+      },
+
+      _splitByUtilityType: function (contract) {
+        var tariffs = contract.tariffs;
+        this._electTariffs = tariffs.filter(function (tariffBlock) {
+          return tariffBlock.utilityType.id == 0;
+        });
+        this._waterTariffs = tariffs.filter(function (tariffBlock) {
+          return tariffBlock.utilityType.id == 1;
+        });
+      },
+
+      validate: function() {
+        return this.$$('#municipalityDropDown').validate() && this.$$('#payerDropDown').validate();
+      },
+
+      serialize: function() {
+        var municipalityDropDown = this.$$('#municipalityDropDown');
+        var payerDropDown = this.$$('#payerDropDown');
+        var flatRateInput = this.$$('#flatRateInput');
+        var reservedBlockPercentageInput = this.$$('#reservedBlockPercentageInput');
+        var tenantCountInput = this.$$('#tenantCountInput');
+
+        return {
+          municipalTariffSetId: municipalityDropDown.selectedItem.item.id,
+          payer: parseInt(payerDropDown.selectedItem.getAttribute('key')),
+          flatRate: flatRateInput.value.length > 0 ? parseFloat(flatRateInput.value) : undefined,
+          reservedBlockPercentage: reservedBlockPercentageInput.value.length > 0 ? parseFloat(reservedBlockPercentageInput.value) : undefined,
+          tenantCount: tenantCountInput.value.length > 0 ? parseInt(tenantCountInput.value) : undefined,
+          commonArea: undefined
         }
       }
-
     });
   </script>
 </dom-module>
