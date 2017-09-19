@@ -75,108 +75,108 @@ Element for managing a building&#39;s tariffs
     <ct-buildings-api id="buildingsApi"></ct-buildings-api>
 
     <div class="main-section">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-6 col-xs-12">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6 col-xs-12">
+            <paper-input
+                    id="searchMunicipalityInput"
+                    label="Search Municipality"
+                    type="text"
+                    hidden="[[ readonly ]]"
+                    placeholder="Type and press enter to search"
+            ></paper-input>
+            <iron-a11y-keys id="a11y" keys="enter" target="[[ _target ]]" on-keys-pressed="_searchMunicipality"></iron-a11y-keys>
+            <template is="dom-if" if="[[ readonly ]]">
               <paper-input
-                      id="searchMunicipalityInput"
-                      label="Search Municipality"
-                      type="text"
-                      hidden="[[ readonly ]]"
-                      placeholder="Type and press enter to search"
-              ></paper-input>
-              <iron-a11y-keys id="a11y" keys="enter" target="[[ _target ]]" on-keys-pressed="_searchMunicipality"></iron-a11y-keys>
-              <template is="dom-if" if="[[ readonly ]]">
-                <paper-input
-                        id="readonlyMunicipalityInput"
-                        label="Municipality"
-                        value="[[ contract.municipality.name ]]"
-                        readonly>
-                </paper-input>
-              </template>
-              <template is="dom-if" if="[[ !readonly ]]">
-                <paper-dropdown-menu
-                        class="custom-dropdown"
-                        id="municipalityDropDown"
-                        label="Municipality"
-                        always-float-label
-                        noink
-                        no-animations
-                        required
-                        auto-validate="[[ !readonly ]]"
-                        error-message="Required">
-                  <paper-listbox
-                          class="dropdown-content"
-                          id="municipalityListBox"
-                          attr-for-selected="key"
-                          selected="[[ municipalities.id ]]"
-                          on-iron-items-changed="_openSearchResultsDropDown"
-                  ><template is="dom-repeat" items="[[ _municipalitySearchResults ]]">
-                      <paper-item key="[[item.id]]" item="[[item]]">[[item.municipality]]</paper-item>
-                    </template>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-              </template>
-            </div>
-            <div class="col-sm-6 col-xs-12">
-              <template is="dom-if" if="[[ readonly ]]">
-                <paper-input
-                        id="readonlyPayerInput"
-                        label="Fees Payed By"
-                        value="[[ contract.payer.name ]]"
-                        readonly>
-                </paper-input>
-              </template>
-              <template is="dom-if" if="[[ !readonly ]]">
-                <paper-dropdown-menu
-                        class="custom-dropdown"
-                        id="payerDropDown"
-                        label="Fees Payed By"
-                        always-float-label
-                        noink
-                        no-animations
-                        required
-                        auto-validate="[[ !readonly ]]"
-                        error-message="Required">
-                  <paper-listbox class="dropdown-content" id="payerListBox" attr-for-selected="key" selected="[[ contract.payer.id ]]">
-                    <paper-item key="0">Owner</paper-item>
-                    <paper-item key="1">Tenant</paper-item>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-              </template>
-            </div>
-            <div class="col-sm-6 col-xs-12">
+                      id="readonlyMunicipalityInput"
+                      label="Municipality"
+                      value="[[ contract.municipality.name ]]"
+                      readonly>
+              </paper-input>
+            </template>
+            <template is="dom-if" if="[[ !readonly ]]">
+              <paper-dropdown-menu
+                      class="custom-dropdown"
+                      id="municipalityDropDown"
+                      label="Municipality"
+                      always-float-label
+                      noink
+                      no-animations
+                      required
+                      auto-validate="[[ !readonly ]]"
+                      error-message="Required">
+                <paper-listbox
+                        class="dropdown-content"
+                        id="municipalityListBox"
+                        attr-for-selected="key"
+                        selected="[[ municipalities.id ]]"
+                        on-iron-items-changed="_openSearchResultsDropDown"
+                ><template is="dom-repeat" items="[[ _municipalitySearchResults ]]">
+                  <paper-item key="[[item.id]]" item="[[item]]">[[item.municipality]]</paper-item>
+                </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </template>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <template is="dom-if" if="[[ readonly ]]">
               <paper-input
-                      id="flatRateInput"
-                      label="Flat-Rate (Optional)"
-                      value="[[ contract.flatRate ]]"
-                      readonly="[[ readonly ]]"
-                      allowed-pattern="[0-9.]"
-              ></paper-input>
-            </div>
-            <div class="col-sm-6 col-xs-12">
-              <paper-input
-                      id="reservedBlockPercentageInput"
-                      label="Reserved Block Percentage (Optional)"
-                      value="[[ contract.reservedBlockPercentage ]]"
-                      readonly="[[ readonly ]]"
-                      allowed-pattern="[0-9.]"
-              ></paper-input>
-            </div>
-            <div class="col-sm-6 col-xs-12">
-              <paper-input
-                      id="tenantCountInput"
-                      label="Amount of Tenants (Optional)"
-                      value="[[ contract.tenantCount ]]"
-                      readonly="[[ readonly ]]"
-                      allowed-pattern="[0-9]"
-              ></paper-input>
-            </div>
-            <div class="col-sm-12 col-xs-12">
-              <paper-button class="table-button btn-primary btn-sm" on-tap="_calculateTariffs" raised hidden="[[ readonly ]]">Calculate</paper-button>
-            </div>
+                      id="readonlyPayerInput"
+                      label="Fees Payed By"
+                      value="[[ contract.payer.name ]]"
+                      readonly>
+              </paper-input>
+            </template>
+            <template is="dom-if" if="[[ !readonly ]]">
+              <paper-dropdown-menu
+                      class="custom-dropdown"
+                      id="payerDropDown"
+                      label="Fees Payed By"
+                      always-float-label
+                      noink
+                      no-animations
+                      required
+                      auto-validate="[[ !readonly ]]"
+                      error-message="Required">
+                <paper-listbox class="dropdown-content" id="payerListBox" attr-for-selected="key" selected="[[ contract.payer.id ]]">
+                  <paper-item key="0">Owner</paper-item>
+                  <paper-item key="1">Tenant</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </template>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <paper-input
+                    id="flatRateInput"
+                    label="Flat-Rate (Optional)"
+                    value="[[ contract.flatRate ]]"
+                    readonly="[[ readonly ]]"
+                    allowed-pattern="[0-9.]"
+            ></paper-input>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <paper-input
+                    id="reservedBlockPercentageInput"
+                    label="Reserved Block Percentage (Optional)"
+                    value="[[ contract.reservedBlockPercentage ]]"
+                    readonly="[[ readonly ]]"
+                    allowed-pattern="[0-9.]"
+            ></paper-input>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <paper-input
+                    id="tenantCountInput"
+                    label="Amount of Tenants (Optional)"
+                    value="[[ contract.tenantCount ]]"
+                    readonly="[[ readonly ]]"
+                    allowed-pattern="[0-9]"
+            ></paper-input>
+          </div>
+          <div class="col-sm-12 col-xs-12">
+            <paper-button class="table-button btn-primary btn-sm" on-tap="_calculateTariffs" raised hidden="[[ readonly ]]">Calculate</paper-button>
           </div>
         </div>
+      </div>
     </div>
 
     <paper-tabs selected='{{ _utility }}' attr-for-selected='key'>
@@ -259,29 +259,34 @@ Element for managing a building&#39;s tariffs
           var contract = {
             municipalTariffSetId: municipalityDropDown.selectedItem.item.id,
             payer: parseInt(payerDropDown.selectedItem.getAttribute('key')),
-            flatRate: flatRateInput.value.length > 0 ? parseFloat(flatRateInput.value) : undefined,
-            reservedBlockPercentage: reservedBlockPercentageInput.value.length > 0 ? parseFloat(reservedBlockPercentageInput.value) : undefined,
-            tenantCount: tenantCountInput.value.length > 0 ? parseInt(tenantCountInput.value) : undefined,
+            flatRate: flatRateInput.value && flatRateInput.value.length > 0 ? parseFloat(flatRateInput.value) : undefined,
+            reservedBlockPercentage: reservedBlockPercentageInput.value && reservedBlockPercentageInput.value.length > 0 ? parseFloat(reservedBlockPercentageInput.value) : undefined,
+            tenantCount: tenantCountInput.value && tenantCountInput.value.length > 0 ? parseInt(tenantCountInput.value) : undefined,
             commonArea: undefined
           };
 
           this._electTariffs = undefined;
           this._waterTariffs = undefined;
           this.$.buildingsApi.previewTariffs(this.buildingId, contract)
-            .then(this._setPropertyResponse.bind(this, 'contract'))
-            .catch(this.fire.bind(this, 'toast', {message: 'Failed to preview building tariffs', type: 'danger'}))
-            .finally();
+                  .then(this._setPropertyResponse.bind(this, 'contract'))
+                  .catch(this.fire.bind(this, 'toast', {message: 'Failed to preview building tariffs', type: 'danger'}))
+                  .finally();
         }
       },
 
       _splitByUtilityType: function (contract) {
-        var tariffs = contract.tariffs;
-        this._electTariffs = tariffs.filter(function (tariffBlock) {
-          return tariffBlock.utilityType.id == 0;
-        });
-        this._waterTariffs = tariffs.filter(function (tariffBlock) {
-          return tariffBlock.utilityType.id == 1;
-        });
+        if (contract) {
+          var tariffs = contract.tariffs;
+          this._electTariffs = tariffs.filter(function (tariffBlock) {
+            return tariffBlock.utilityType.id == 0;
+          });
+          this._waterTariffs = tariffs.filter(function (tariffBlock) {
+            return tariffBlock.utilityType.id == 1;
+          });
+        } else {
+          this._electTariffs = undefined;
+          this._waterTariffs = undefined;
+        }
       },
 
       validate: function() {
@@ -298,9 +303,9 @@ Element for managing a building&#39;s tariffs
         return {
           municipalTariffSetId: municipalityDropDown.selectedItem.item.id,
           payer: parseInt(payerDropDown.selectedItem.getAttribute('key')),
-          flatRate: flatRateInput.value.length > 0 ? parseFloat(flatRateInput.value) : undefined,
-          reservedBlockPercentage: reservedBlockPercentageInput.value.length > 0 ? parseFloat(reservedBlockPercentageInput.value) : undefined,
-          tenantCount: tenantCountInput.value.length > 0 ? parseInt(tenantCountInput.value) : undefined,
+          flatRate: flatRateInput.value && flatRateInput.value.length > 0 ? parseFloat(flatRateInput.value) : undefined,
+          reservedBlockPercentage: reservedBlockPercentageInput.value && reservedBlockPercentageInput.value.length > 0 ? parseFloat(reservedBlockPercentageInput.value) : undefined,
+          tenantCount: tenantCountInput.value && tenantCountInput.value.length > 0 ? parseInt(tenantCountInput.value) : undefined,
           commonArea: undefined
         }
       }
