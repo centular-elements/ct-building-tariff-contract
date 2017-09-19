@@ -293,13 +293,16 @@ Element for managing a building&#39;s tariffs
       },
 
       serialize: function() {
+        var readonlyMunicipalityInput = this.$$('#readonlyMunicipalityInput');
         var municipalityDropDown = this.$$('#municipalityDropDown');
         var payerDropDown = this.$$('#payerDropDown');
         var flatRateInput = this.$$('#flatRateInput');
         var reservedBlockPercentageInput = this.$$('#reservedBlockPercentageInput');
         var tenantCountInput = this.$$('#tenantCountInput');
 
-        this.$$('#readonlyMunicipalityInput').value = municipalityDropDown.selectedItem.item.municipality;
+        if (readonlyMunicipalityInput) {
+          readonlyMunicipalityInput.value = municipalityDropDown.selectedItem.item.municipality;
+        }
 
         return {
           municipalTariffSetId: municipalityDropDown.selectedItem.item.id,
