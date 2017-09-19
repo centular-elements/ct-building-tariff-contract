@@ -86,37 +86,37 @@ Element for managing a building&#39;s tariffs
                     placeholder="Type and press enter to search"
             ></paper-input>
             <iron-a11y-keys id="a11y" keys="enter" target="[[ _target ]]" on-keys-pressed="_searchMunicipality"></iron-a11y-keys>
-            <template is="dom-if" if="[[ readonly ]]">
-              <paper-input
-                      id="readonlyMunicipalityInput"
-                      label="Municipality"
-                      value="[[ contract.municipality.municipality ]]"
-                      readonly>
-              </paper-input>
-            </template>
-            <template is="dom-if" if="[[ !readonly ]]">
-              <paper-dropdown-menu
-                      class="custom-dropdown"
-                      id="municipalityDropDown"
-                      label="Municipality"
-                      always-float-label
-                      noink
-                      no-animations
-                      required
-                      auto-validate="[[ !readonly ]]"
-                      error-message="Required">
-                <paper-listbox
-                        class="dropdown-content"
-                        id="municipalityListBox"
-                        attr-for-selected="key"
-                        selected="[[ municipalities.id ]]"
-                        on-iron-items-changed="_openSearchResultsDropDown"
-                ><template is="dom-repeat" items="[[ _municipalitySearchResults ]]">
-                  <paper-item key="[[item.id]]" item="[[item]]">[[item.municipality]]</paper-item>
-                </template>
-                </paper-listbox>
-              </paper-dropdown-menu>
-            </template>
+            <!--<template is="dom-if" if="[[ readonly ]]">-->
+            <paper-input
+                    id="readonlyMunicipalityInput"
+                    label="Municipality"
+                    value="[[ contract.municipality.municipality ]]"
+                    readonly hidden="[[ !readonly ]]">
+            </paper-input>
+            <!--</template>-->
+            <!--<template is="dom-if" if="[[ !readonly ]]">-->
+            <paper-dropdown-menu
+                    class="custom-dropdown"
+                    id="municipalityDropDown"
+                    label="Municipality"
+                    always-float-label
+                    noink
+                    no-animations
+                    required
+                    auto-validate="[[ !readonly ]]"
+                    error-message="Required" hidden="[[ readonly ]]">
+              <paper-listbox
+                      class="dropdown-content"
+                      id="municipalityListBox"
+                      attr-for-selected="key"
+                      selected="[[ contract.municipality.id ]]"
+                      on-iron-items-changed="_openSearchResultsDropDown"
+              ><template is="dom-repeat" items="[[ _municipalitySearchResults ]]">
+                <paper-item key="[[item.id]]" item="[[item]]">[[item.municipality]]</paper-item>
+              </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            <!--</template>-->
           </div>
           <div class="col-sm-6 col-xs-12">
             <template is="dom-if" if="[[ readonly ]]">
@@ -275,6 +275,8 @@ Element for managing a building&#39;s tariffs
 
       _splitByUtilityType: function (contract) {
         if (contract) {
+          this._municipalitySearchResults = [contract.municipality];
+
           var tariffs = contract.tariffs;
           this._electTariffs = tariffs.filter(function (tariffBlock) {
             return tariffBlock.utilityType.id == 0;
