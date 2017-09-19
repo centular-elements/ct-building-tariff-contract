@@ -90,7 +90,7 @@ Element for managing a building&#39;s tariffs
               <paper-input
                       id="readonlyMunicipalityInput"
                       label="Municipality"
-                      value="[[ contract.municipality.name ]]"
+                      value="[[ contract.municipality.municipality ]]"
                       readonly>
               </paper-input>
             </template>
@@ -299,6 +299,8 @@ Element for managing a building&#39;s tariffs
         var flatRateInput = this.$$('#flatRateInput');
         var reservedBlockPercentageInput = this.$$('#reservedBlockPercentageInput');
         var tenantCountInput = this.$$('#tenantCountInput');
+
+        this.$$('#readonlyMunicipalityInput').value = municipalityDropDown.selectedItem.item.municipality;
 
         return {
           municipalTariffSetId: municipalityDropDown.selectedItem.item.id,
