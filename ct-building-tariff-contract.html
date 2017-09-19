@@ -207,7 +207,6 @@ Element for managing a building&#39;s tariffs
           type: Boolean,
           value: false
         },
-        buildingId: String,
         _target: {
           type: Object,
           value: function () {
@@ -267,7 +266,7 @@ Element for managing a building&#39;s tariffs
 
           this._electTariffs = undefined;
           this._waterTariffs = undefined;
-          this.$.buildingsApi.previewTariffs(this.buildingId, contract)
+          this.$.buildingsApi.previewTariffs(contract)
                   .then(this._setPropertyResponse.bind(this, 'contract'))
                   .catch(this.fire.bind(this, 'toast', {message: 'Failed to preview building tariffs', type: 'danger'}))
                   .finally();
